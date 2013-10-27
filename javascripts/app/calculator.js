@@ -1,7 +1,6 @@
 // moment will be required from javascripts/lib because of the RequireJS
 // configuration we have set up.
-define(['moment'], function(moment) {
-  var DEFAULT_MDE = 0.05;
+define(['moment', 'qnorm'], function(moment, qnorm) {
 
   // Time Related Stuff
   // ------------------
@@ -42,26 +41,66 @@ define(['moment'], function(moment) {
     return daysBetweenDates(thisDayOneMonthAgo(yesterday()), yesterday());
   };
 
-  var DEFAULT_SAMPLE_LENGTH = daysInLastMonth();
+  var DEFAULTS = {
+    'SAMPLE_LENGTH': daysInLastMonth(),
+    'ALPHA_LEVEL': 0.05,
+    'POWER_LEVEL': 0.80,
+    'MDE': 0.05
+  };
 
   // Calculating Related Stuff
   // -------------------------
 
+  // IDEA: Why am I making this into an object? The only benefit with making it
+  // an object and making things like daysNeeded into methods is so that I could
+  // mutate the calculator and get new, correct answers.
+  //
+  // Example:
+  // 
+  //   var calc = new Calculator({
+  //    currentPageviews: 8800,
+  //    currentConversions: 634
+  //   });
+  //   calc.daysNeeded();
+  //   calc.currentPageviews = 12999;
+  //   calc.daysNeeded();
+  //
+  // This is silly though because I don't want to mutate the calculator. Instead,
+  // it should just be a function. Give args in and it returns the days needed.
   var Calculator = function(options) {
     this.currentPageviews = parseFloat(options.currentPageviews, 10);
-    this.sampleLength = parseFloat(options.sampleLength, 10) || DEFAULT_SAMPLE_LENGTH;
+    this.sampleLength = parseFloat(options.sampleLength, 10) || DEFAULTS.SAMPLE_LENGTH;
     this.currentConversions = parseFloat(options.currentConversions, 10);
-    this.mde = options.mde || DEFAULT_MDE;
+    this.mde = options.mde || DEFAULTS.MDE;
+    this.alphaLevel = DEFAULTS.ALPHA_LEVEL
+    this.powerLevel = DEFAULTS.POWER_LEVEL
 
     this.currentConversionRate = function() {
       return this.currentConversions / this.currentPageviews;
     };
 
+    this.tAlpha2 = function() { return qnorm(1.0 - this.alphaLevel / 2); };
+    this.tBeta = function() { return qnorm(this.powerLevel); };
+
+    this.sd1 = function() {
+      var p = this.currentConversionRate();
+      return Math.sqrt(2 * p * (1.0 - p));
+    };
+
+    this.sd2 = function() {
+      var p = this.currentConversionRate();
+      return Math.sqrt(p * (1.0 - p) + (p + this.mde) * (1.0 - p - this.mde));
+    };
+
     this.samplesNeeded = function() {
       var mdeSquared = this.mde * this.mde,
-          numerator = this.currentConversionRate() * (1 - this.currentConversionRate());
+          tAlpha2 = this.tAlpha2(),
+          tBeta = this.tBeta(),
+          sd1 = this.sd1(),
+          sd2 = this.sd2(),
+          num = (tAlpha2 * sd1 + tBeta * sd2);
 
-      return 16 * numerator / mdeSquared;
+      return num * num / mdeSquared;
     };
 
     this.daysNeeded = function() {
