@@ -8,15 +8,22 @@ requirejs.config({
   // the paths config could be for a directory.
   paths: {
     app: '../app',
+    bootstrap: 'http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min'
+  },
+  shim: {
+    "bootstrap": {
+      deps: ["jquery"],
+      exports: "$.fn.modal",
+      enforceDefine: true
+    }
   }
 });
 
 require([
-    // "http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js",
     "jquery",
-    // "http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js",
+    "bootstrap",
     "app/calculator"
-  ], function($, Calculator) {
+  ], function($, bootstrap, Calculator) {
 
   $(function(){
     var inputSelectors = '#current-pageviews, #current-conversions';
