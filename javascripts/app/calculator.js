@@ -1,4 +1,6 @@
-(function($){
+// moment will be required from javascripts/lib because of the RequireJS
+// configuration we have set up.
+define(['moment'], function(moment) {
   var DEFAULT_MDE = 0.05;
 
   // Time Related Stuff
@@ -67,38 +69,5 @@
     };
   };
 
-  $(function(){
-    var inputSelectors = '#current-pageviews, #current-conversions';
-
-    var $currentPageviews = $('#current-pageviews');
-    var $currentConversions = $('#current-conversions');
-
-    var results = function() {
-      return [0.01, 0.02, 0.03, 0.05, 0.10].map(function(mde) {
-        return new Calculator({
-          currentPageviews: $currentPageviews.val(),
-          currentConversions: $currentConversions.val(),
-          mde: mde
-        }).daysNeeded();
-      });
-    };
-
-    var populateResultsTable = function(numbers) {
-      $('tbody tr td:last-child').each(function(index, el) {
-        el.innerHTML = (Math.round(numbers.shift() * 100) / 100) + ' days';
-      });
-    };
-
-    $(inputSelectors).on('change', function(e) {
-      populateResultsTable(results());
-    });
-
-    $('form').on('submit', function(e) {
-      e.preventDefault();
-      populateResultsTable(results());
-    });
-
-    populateResultsTable(results());
-  });
-
-})(jQuery);
+  return Calculator;
+});
