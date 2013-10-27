@@ -16,24 +16,26 @@
 <body>
   <div class="container">
     <header class="row">
-      <div class="col-md-8 col-md-offset-2">
+      <div class="col-md-6 col-md-offset-3">
         <h1>How Many Days Will My A/B Test Take?</h1>
       </div>
     </header>
-    <div class="row">
+    <div class="row collect">
       <div class="col-md-8 col-md-offset-2">
-        <h2>Step 1. Collect existing Data</h2>
+        <h2>Step 1. Collect Existing Data</h2>
 
         <form role="form">
+          <div class="alert alert-danger invisible"></div> 
           <div class="form-group">
             <label for="current-pageviews">Number of pageviews in the last month</label>
-            <input id="current-pageviews" type="text" value="5073" class="form-control"/>
+            <input id="current-pageviews" type="text" value="5073" 
+              class="form-control" autofocus="autofocus"/>
             <div class="help-block">
               The number of pageviews received by the page you plan to test on
               over the last month. Get this data in your 
-              <a href="https://www.google.com/analytics" target="_blank">Google Analytics</a>
+              <a href="https://www.google.com/analytics" tabindex="-1" target="_blank">Google Analytics</a>
               account 
-              <a data-toggle="modal" href="#pageviews-instructions">(show me how)</a>.
+              <a data-toggle="modal" href="#pageviews-instructions" tabindex="-1">(show me how)</a>.
             </div>
           </div>
           
@@ -49,11 +51,11 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row results">
       <div class="col-md-8 col-md-offset-2">
         <h2>Step 2. Results!</h2>
         <p class="help-block">
-          The number of days that your test will take depends on the impact of the 
+          The number of days that your test takes depends on the impact of the 
           change you make.
         </p>
         <p class="help-block">
@@ -76,7 +78,7 @@
               <td>2%</td>
               <td></td>
             </tr>
-            <tr id="mde-3-result">
+            <tr id="mde-3-result" class="success">
               <td>3%</td>
               <td></td>
             </tr>
