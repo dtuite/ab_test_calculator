@@ -100,6 +100,8 @@ define(['moment', 'qnorm'], function(moment, qnorm) {
           sd2 = this.sd2(),
           num = (tAlpha2 * sd1 + tBeta * sd2);
 
+      console.log("Samples needed", num * num / mdeSquared);
+
       return num * num / mdeSquared;
     };
 

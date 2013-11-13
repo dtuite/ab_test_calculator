@@ -27,7 +27,7 @@
         <form role="form">
           <div class="alert alert-danger invisible"></div> 
           <div class="form-group">
-            <label for="current-pageviews">Number of pageviews in the last month</label>
+            <label for="current-pageviews" title="We automatically calculate the number of days that were in the month in question">Number of pageviews in the last month</label>
             <input id="current-pageviews" type="text" value="5073" 
               class="form-control" autofocus="autofocus"/>
             <div class="help-block">
@@ -40,7 +40,7 @@
           </div>
           
           <div class="form-group">
-            <label for="current-conversions">Number of conversions in the last month</label>
+            <label for="current-conversions" title="We automatically calculate the number of days that were in the month in question">Number of conversions in the last month</label>
             <input id="current-conversions" type="text" value="1804" class="form-control"/>
             <div class="help-block">
               The number of conversions which occured from that page in the last month.
@@ -66,7 +66,7 @@
           <thead>
             <tr>
               <th>Effect of Change</th>
-              <th>Days Needed</th>
+              <th>Days Needed <small>(per branch)</small></th>
             </tr>
           </thead>
           <tbody>
